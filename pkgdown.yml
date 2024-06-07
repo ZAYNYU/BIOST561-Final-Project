@@ -2,8 +2,9 @@ pandoc: 3.1.11
 pkgdown: 2.0.9
 pkgdown_sha: ~
 articles:
+  BIOST561FinalProject: BIOST561FinalProject.html
   Details: Details.html
-last_built: 2024-06-07T03:54Z
+last_built: 2024-06-07T04:02Z
 urls:
   reference: https://zaynyu.github.io/BIOST561FinalProject/reference
   article: https://zaynyu.github.io/BIOST561FinalProject/articles
