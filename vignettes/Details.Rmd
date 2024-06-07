@@ -1,0 +1,32 @@
+---
+title: "Details"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Details}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+# library(BIOST561FinalProject)
+```
+
+This is the details of the function: \ 
+
+vcovCR.glmerMod(obj, cluster, type="classic") \ 
+
+obj: Fitted glmer model for which to calculate the robust variance-covariance matrix \ 
+
+cluster: Optional expression or vector indicating which observations belong to the same cluster. \ 
+
+type: Character string specifying which robust variance form should be used, with available options ”classic” (default), ”DF”, ”KC”, ”MD”, or ”FG”. See ”Details” for further information. \ 
+
+Warning: this is just a demo of vcovCR.glmerMod function.
+
