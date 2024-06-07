@@ -1,8 +1,28 @@
+#' Variance Covariance Computation for GLMM
+#'
+#' Computes robust variance-covariance matrix for generalized linear mixed models
+#' fitted with `glmer` from the `lme4` package. It allows specification of
+#' clustering and supports different types of variance estimations.
+#'
+#' @name vcovCR.glmerModZY
+#' @param obj A `glmerMod` object representing the fitted model.
+#' @param cluster Optional; a vector indicating the cluster structure within the data.
+#'                If NULL, attempts to retrieve cluster information from attributes of the model object.
+#' @param type Character string specifying the type of variance-covariance matrix to compute.
+#'             Supported types include "classic", with potential for further types depending on method implementation.
+#'
+#' @return Returns a diagonal matrix with the computed variances for each fixed effect in the model.
+#'
+#' @export
+#' @importFrom lme4 glmer
+#' @importFrom matrixStats rowSums
+#' @importFrom stats setNames
+#'
+
 library("WoodburyMatrix")
 library("sandwich")
 library("clubSandwich")
 library("lme4")
-
 vcovCR.glmerModZY <- function(obj, cluster = NULL, type = "classic") {
   # put some check here to ensure the input is correct
   # If cluster not specified, will be set to attr(obj,"cluster")
