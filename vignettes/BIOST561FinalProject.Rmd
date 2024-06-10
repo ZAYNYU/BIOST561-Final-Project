@@ -102,14 +102,15 @@ vcovCR.glmerModZY <- function(obj, cluster, type = "classic") {
 Example
 
 ```{r}
+library(usethis)
 library("sandwich")
 library("clubSandwich")
 library("lme4")
 library("WoodburyMatrix")
 
 # Import data and fit lmer model, creat factors for clustering
-
 load("ctdata.RData")
+
 ctdata$fcluster = factor(ctdata$hdist)
 ctdata$ftime = factor(ctdata$time)
 ctdata$clustime = interaction(ctdata$fcluster,ctdata$ftime)
