@@ -102,7 +102,7 @@ vcovCR.glmerModZY <- function(obj, cluster, type = "classic") {
 Example
 
 ```{r}
-library(usethis)
+library("usethis")
 library("sandwich")
 library("clubSandwich")
 library("lme4")
