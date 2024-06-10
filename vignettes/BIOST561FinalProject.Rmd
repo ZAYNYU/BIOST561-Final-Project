@@ -15,12 +15,12 @@ knitr::opts_chunk$set(echo = TRUE)
 The goal is to write a function which will provide robust variances for generalized linear mixed models fit using the glmer function in R.
 
 ```{r}
-vcovCR.glmerModZY <- function(obj, cluster = NULL, type = "classic") {
+vcovCR.glmerModZY <- function(obj, cluster, type = "classic") {
   # put some check here to ensure the input is correct
   # If cluster not specified, will be set to attr(obj,"cluster")
-  if (is.null(cluster)) {
-    cluster <- attr(obj, "cluster")
-  }
+  # if (is.null(cluster)) {
+  #   cluster <- attr(obj, "cluster")
+  # }
 
   link <- family(obj)$link
 
@@ -97,5 +97,23 @@ vcovCR.glmerModZY <- function(obj, cluster = NULL, type = "classic") {
   diag(robustVar)  # Return diagonal elements representing the variances
 }
 
+```
+
+Example
+
+```{r}
+library("sandwich")
+library("clubSandwich")
+library("lme4")
+library("WoodburyMatrix")
+
+# Import data and fit lmer model, creat factors for clustering
+
+load("ctdata.RData")
+ctdata$fcluster = factor(ctdata$hdist)
+ctdata$ftime = factor(ctdata$time)
+ctdata$clustime = interaction(ctdata$fcluster,ctdata$ftime)
+rslt = lmer(ct ~ ftime + treat + (1 | fcluster) + (1 | clustime), data=ctdata)
+vcovCR.glmerModZY(rslt, ctdata$fcluster)
 ```
 
