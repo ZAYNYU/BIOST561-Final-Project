@@ -13,7 +13,8 @@ Imports:
   WoodburyMatrix,
   sandwich,
   clubSandwich,
-  lme4
+  lme4,
+  usethis
 Suggests: 
     knitr,
     rmarkdown,
