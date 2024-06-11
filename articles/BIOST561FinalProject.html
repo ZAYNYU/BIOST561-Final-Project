@@ -86,12 +86,12 @@ version is on the way.<a class="anchor" aria-label="anchor" href="#warning-this-
 for generalized linear mixed models fit using the glmer function in
 R.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">vcovCR.glmerModZY</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">obj</span>, <span class="va">cluster</span> <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">type</span> <span class="op">=</span> <span class="st">"classic"</span><span class="op">)</span> <span class="op">{</span></span>
+<code class="sourceCode R"><span><span class="va">vcovCR.glmerModZY</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">obj</span>, <span class="va">cluster</span>, <span class="va">type</span> <span class="op">=</span> <span class="st">"classic"</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="co"># put some check here to ensure the input is correct</span></span>
 <span>  <span class="co"># If cluster not specified, will be set to attr(obj,"cluster")</span></span>
-<span>  <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html" class="external-link">is.null</a></span><span class="op">(</span><span class="va">cluster</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span>    <span class="va">cluster</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">obj</span>, <span class="st">"cluster"</span><span class="op">)</span></span>
-<span>  <span class="op">}</span></span>
+<span>  <span class="co"># if (is.null(cluster)) {</span></span>
+<span>  <span class="co">#   cluster &lt;- attr(obj, "cluster")</span></span>
+<span>  <span class="co"># }</span></span>
 <span></span>
 <span>  <span class="va">link</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/family.html" class="external-link">family</a></span><span class="op">(</span><span class="va">obj</span><span class="op">)</span><span class="op">$</span><span class="va">link</span></span>
 <span></span>
@@ -167,6 +167,35 @@ R.</p>
 <span>  <span class="va">robustVar</span> <span class="op">&lt;-</span> <span class="va">c</span> <span class="op">*</span> <span class="va">XtVX</span> <span class="op"><a href="https://rdrr.io/r/base/matmult.html" class="external-link">%*%</a></span> <span class="va">sum</span> <span class="op"><a href="https://rdrr.io/r/base/matmult.html" class="external-link">%*%</a></span> <span class="va">XtVX</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/diag.html" class="external-link">diag</a></span><span class="op">(</span><span class="va">robustVar</span><span class="op">)</span>  <span class="co"># Return diagonal elements representing the variances</span></span>
 <span><span class="op">}</span></span></code></pre></div>
+<p>Example</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://sandwich.R-Forge.R-project.org/" class="external-link">"sandwich"</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="http://jepusto.github.io/clubSandwich/" class="external-link">"clubSandwich"</a></span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## Registered S3 method overwritten by 'clubSandwich':</span></span>
+<span><span class="co">##   method    from    </span></span>
+<span><span class="co">##   bread.mlm sandwich</span></span></code></pre>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://github.com/lme4/lme4/" class="external-link">"lme4"</a></span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## Loading required package: Matrix</span></span></code></pre>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://github.com/mbertolacci/WoodburyMatrix" class="external-link">"WoodburyMatrix"</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># # Import data and fit lmer model, creat factors for clustering</span></span>
+<span><span class="co"># url &lt;- "https://github.com/ZAYNYU/BIOST561FinalProject/blob/main/vignettes/ctdata.Rdata"  # Use the download link</span></span>
+<span><span class="co"># temp &lt;- tempfile()  # Creates a temporary file which will be deleted later</span></span>
+<span><span class="co"># download.file(url, temp, mode = "wb")  # Download the file in binary mode</span></span>
+<span><span class="co"># load(temp)  # Load the .RData file into your R session</span></span>
+<span><span class="co"># unlink(temp)  # Remove the temporary file immediately after loading</span></span>
+<span><span class="co"># load(url("https://github.com/ZAYNYU/BIOST561FinalProject/blob/main/vignettes/ctdata.Rdata"))</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/load.html" class="external-link">load</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/connections.html" class="external-link">url</a></span><span class="op">(</span><span class="st">"https://raw.githubusercontent.com/ZAYNYU/BIOST561FinalProject/main/vignettes/ctdata.Rdata"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">ctdata</span><span class="op">$</span><span class="va">fcluster</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">ctdata</span><span class="op">$</span><span class="va">hdist</span><span class="op">)</span></span>
+<span><span class="va">ctdata</span><span class="op">$</span><span class="va">ftime</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">ctdata</span><span class="op">$</span><span class="va">time</span><span class="op">)</span></span>
+<span><span class="va">ctdata</span><span class="op">$</span><span class="va">clustime</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/interaction.html" class="external-link">interaction</a></span><span class="op">(</span><span class="va">ctdata</span><span class="op">$</span><span class="va">fcluster</span>,<span class="va">ctdata</span><span class="op">$</span><span class="va">ftime</span><span class="op">)</span></span>
+<span><span class="va">rslt</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/lme4/man/lmer.html" class="external-link">lmer</a></span><span class="op">(</span><span class="va">ct</span> <span class="op">~</span> <span class="va">ftime</span> <span class="op">+</span> <span class="va">treat</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">fcluster</span><span class="op">)</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">clustime</span><span class="op">)</span>, data<span class="op">=</span><span class="va">ctdata</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/vcovCR.glmerModZY.html">vcovCR.glmerModZY</a></span><span class="op">(</span><span class="va">rslt</span>, <span class="va">ctdata</span><span class="op">$</span><span class="va">fcluster</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">##  (Intercept)       ftime1       ftime2       ftime3       ftime4        treat </span></span>
+<span><span class="co">## 0.0001379472 0.0002188822 0.0002572821 0.0003607838 0.0003631747 0.0001417230</span></span></code></pre>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
