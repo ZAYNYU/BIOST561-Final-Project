@@ -107,8 +107,14 @@ library("clubSandwich")
 library("lme4")
 library("WoodburyMatrix")
 
-# Import data and fit lmer model, creat factors for clustering
-load("ctdata.RData")
+# # Import data and fit lmer model, creat factors for clustering
+# url <- "https://github.com/ZAYNYU/BIOST561FinalProject/blob/main/vignettes/ctdata.Rdata"  # Use the download link
+# temp <- tempfile()  # Creates a temporary file which will be deleted later
+# download.file(url, temp, mode = "wb")  # Download the file in binary mode
+# load(temp)  # Load the .RData file into your R session
+# unlink(temp)  # Remove the temporary file immediately after loading
+# load(url("https://github.com/ZAYNYU/BIOST561FinalProject/blob/main/vignettes/ctdata.Rdata"))
+load(url("https://raw.githubusercontent.com/ZAYNYU/BIOST561FinalProject/main/vignettes/ctdata.Rdata"))
 
 ctdata$fcluster = factor(ctdata$hdist)
 ctdata$ftime = factor(ctdata$time)
